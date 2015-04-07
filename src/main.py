@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template    
 import datetime
 import pymysql
 import pymysql.cursors
@@ -10,7 +10,7 @@ def getTemps(start = 0, end = 0):
     connection = pymysql.connect(host='localhost', user='web', passwd='', db='thermometer', cursorclass=pymysql.cursors.DictCursor)    
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT * FROM temperature_readings;"
+            sql = "SELECT * FROM (SELECT @row := @row + 1 AS rownum, celsius_reading FROM (SELECT @row := 0) r, reading_time, temperature_readings) RANKED WHERE rownum % 60 = 1"
             cursor.execute(sql)
             data = cursor.fetchall()
     finally:
