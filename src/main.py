@@ -22,7 +22,7 @@ def getTemps(start = 0, end = 0):
 def temp():
     data = getTemps()
     current_temp = data[-1:][0][u'reading_time'].strftime('%m-%d %H:%M') + " : " + str(data[-1:][0][u'celsius_reading']/1000.)
-    data = [(x[u'reading_time'], x[u'celsius_reading']/1000.) for i, x in enumerate(data) if i % 60 == 0]
+    data = [(x[u'reading_time'], x[u'celsius_reading']/1000.) for i, x in enumerate(data)]
 
     templateData = {
             'title': 'temperature',
