@@ -5,11 +5,16 @@
     </head>
 
     <body>
-        <h1>Hello, World!</h1>
+        <h1>The temperature in our room!</h1>
         <h2>{{ temp }}</h2>
 
         <canvas id="temp-chart" width="2000" height="1000"></canvas>
-
+        
+        {% if weekly == true %}
+        <a href="/temp/daily">Daily view</a>
+        {% else %}
+        <a href="/">Weekly view</a>
+        {% endif %}
         <script>  
             var data = {
                 labels:[{% for x in data %}

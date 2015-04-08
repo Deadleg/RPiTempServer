@@ -5,12 +5,18 @@ import pymysql.cursors
 
 app = Flask(__name__)
 
-def getTemps(start = 0, end = 0):
+weeklyInterval = 60
+dailyInterval = 30
+
+def getTemps(start = (datetime.now() - 7 days), end = datetime.now(), interval = weeklyInterval):
+    startString = start.strftime("%Y-%m-%d %H:%M:%S") 
+    endString = end.strtime("%Y-%m-%d %H:%M:%S")
+
     data = []
     connection = pymysql.connect(host='localhost', user='web', passwd='', db='thermometer', cursorclass=pymysql.cursors.DictCursor)    
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT * FROM (SELECT @row := @row + 1 AS rownum, reading_time, celsius_reading FROM (SELECT @row := 0) r, temperature_readings) RANKED WHERE rownum % 60 = 1"
+            sql = "SELECT * FROM (SELECT @row := @row + 1 AS rownum, reading_time, celsius_reading FROM (SELECT @row := 0) r, temperature_readings) RANKED WHERE rownum % " + str(interval) + " = AND (reading_time BETWEEN " + startString + " AND " + endString + ");"
             cursor.execute(sql)
             data = cursor.fetchall()
     finally:
@@ -27,7 +33,8 @@ def temp():
     templateData = {
             'title': 'temperature',
             'temp': current_temp,
-            'data': data
+            'data': data,
+            'weekly' : true
         }
     return render_template('main.html', **templateData)
 
