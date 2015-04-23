@@ -8,7 +8,11 @@ app = Flask(__name__)
 weeklyInterval = 60
 dailyInterval = 15
 
-def getTemps(start = (datetime.now() - timedelta(days=7)), end = datetime.now(), interval = weeklyInterval):
+def getTemps(start = False, end = False, interval = weeklyInterval):
+    if start == False:
+        start = datetime.now() - timedelta(days=7)
+    if end == False:
+        end = datetime.now()
     startString = "\'" + start.strftime("%Y-%m-%d %H:%M:%S") + "\'"
     endString = "\'" + end.strftime("%Y-%m-%d %H:%M:%S") + "\'"
 
